@@ -1,13 +1,30 @@
 import { useState } from "react";
+import _ from "lodash";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 import DescriptionIcon from "@mui/icons-material/Description";
 import CheckIcon from "@mui/icons-material/Check";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import _ from "lodash";
+import { useTaskContext } from "../contexts/TaskContext";
+function handleComplete(e, el, taskList, setTaskList) {
+  if (e.target.textContent === "Complete") {
+    const updated = taskList.map((task) =>
+      _.isEqual(task, el) ? { ...task, completed: true } : task
+    );
+    setTaskList(updated);
+  } else if (e.target.closest(`svg`).id === "delete") {
+    console.log("delete");
+    const updated = taskList.filter((task) => !_.isEqual(task, el));
+    setTaskList(updated);
+  } else if (e.target.closest(`svg`).id === "edit") {
+    console.log("edit");
+  }
+}
+function handleDetail(detail, setDetail) {
+  setDetail(!detail);
+}
 function TaskElement({ el }) {
-  console.log(el);
   const weekDays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
   const monthsArr = [
     "Jan",
@@ -32,21 +49,16 @@ function TaskElement({ el }) {
   const min = dueDate.getMinutes();
   const sec = dueDate.getSeconds();
   const [detail, setDetail] = useState(false);
-  //   const [completed, setCompleted] = useState(el.completed);
+  const { taskList, setTaskList } = useTaskContext();
+
   return (
-    <div className="bg-blue-400 py-3 rounded-lg m-2">
+    <div
+      className="bg-blue-400 py-3 rounded-lg m-2 w-100"
+      onClick={(e) => handleComplete(e, el, taskList, setTaskList)}
+    >
       <p
         className="flex justify-between mb-2 cursor-pointer"
-        onClick={(e) => {
-          setDetail(!detail);
-          if (e.target === "Complete") {
-            setTaskList(
-              taskList.map((task) => {
-                _.isEqual(task, el) ? { ...task, completed: true } : task;
-              })
-            );
-          }
-        }}
+        onClick={() => handleDetail(detail, setDetail)}
       >
         {" "}
         <span className="font-bold flex gap-3">
@@ -65,17 +77,10 @@ function TaskElement({ el }) {
           <span className="font-extralight self-end">{`${hour < 10 ? `0${hour}` : hour}:${min < 10 ? `0${min}` : min}:${sec < 10 ? `0${sec}` : sec}`}</span>
         </div>
       )}
-      <p
-        className="flex justify-between items-center pt-3"
-        onClick={(e) => {
-          // e.target.textContent === "Complete" ? setCompleted(true) : null;
-          console.log("target", e.target);
-          console.log("current target", e.currentTarget);
-        }}
-      >
-        <EditIcon />
-        <DeleteIcon />
-        <button className="bg-blue-500 rounded-xl font-bold font-serif px-3">
+      <p className="flex justify-between items-center pt-3 ">
+        <EditIcon id="edit" className="custom-cursor-edit" />
+        <DeleteIcon id="delete" className="custom-cursor-delete" />
+        <button className="bg-blue-500 rounded-xl font-bold font-serif px-3 cursor-grab">
           {el.completed ? <CheckIcon /> : "Complete"}
         </button>
       </p>

@@ -1,16 +1,15 @@
 import { useTaskContext } from "../contexts/TaskContext";
-import TaskElement from "./TaskElement";
 
-function Priority() {
+function Categories() {
   const { taskList } = useTaskContext();
   return (
-    <div className="priority cursor-pointer select-none ">
+    <div className="categories cursor-pointer select-none ">
       <div>
         <h2 className="bg-sky-400 px-5 border-2 border-sky-400 rounded-lg py-1 my-2 font-extrabold tracking-widest">
-          Low
+          Personal
         </h2>
         {taskList
-          .filter((el) => el.priority === "low")
+          .filter((el) => el.categories === "personal")
           .map((ele) => (
             <div>
               <TaskElement el={ele} />
@@ -19,10 +18,10 @@ function Priority() {
       </div>
       <div>
         <h2 className="bg-sky-400 px-5 border-2 border-sky-400 rounded-lg py-1 my-2 font-extrabold tracking-widest">
-          Medium
+          Work
         </h2>
         {taskList
-          .filter((el) => el.priority === "medium")
+          .filter((el) => el.categories === "work")
           .map((ele) => (
             <div>
               <TaskElement el={ele} />
@@ -31,10 +30,10 @@ function Priority() {
       </div>
       <div>
         <h2 className="bg-sky-400 px-5 border-2 border-sky-400 rounded-lg py-1 my-2 font-extrabold tracking-widest">
-          High
+          Other
         </h2>
         {taskList
-          .filter((el) => el.priority === "high")
+          .filter((el) => el.categories === "other")
           .map((ele) => (
             <div>
               <TaskElement el={ele} />
@@ -44,4 +43,4 @@ function Priority() {
     </div>
   );
 }
-export default Priority;
+export default Categories;

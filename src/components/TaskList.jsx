@@ -2,7 +2,9 @@ import { useState } from "react";
 import Priority from "./Priority";
 import TasksByDate from "./TasksByDate";
 import DeleteIcon from "@mui/icons-material/Delete";
-function TaskList({ taskList, setTaskList }) {
+import { useTaskContext } from "../contexts/TaskContext";
+function TaskList() {
+  const { taskList, setTaskList } = useTaskContext();
   const [TaskDependence, setTaskDependence] = useState("priority");
   return (
     <div>

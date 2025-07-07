@@ -1,1 +1,7 @@
 @import "tailwindcss";
+.custom-cursor-delete {
+  cursor: url("./assets/delete.svg"), grab;
+}
+.custom-cursor-edit {
+  cursor: url("./assets/edit.svg"), grab;
+}
