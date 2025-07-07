@@ -2,6 +2,7 @@ import DatePicker from "react-datepicker";
 import { useState } from "react";
 import "react-datepicker/dist/react-datepicker.css";
 function CreateTask({ setTaskList, taskList, completed }) {
+  const [isCreated, setIsCreated] = useState(false);
   const [taskTitle, setTaskTitle] = useState("");
   const [description, setDescription] = useState("");
   const [priority, setPriority] = useState("low");
@@ -12,7 +13,7 @@ function CreateTask({ setTaskList, taskList, completed }) {
   const taskOpened = open ?? clicked;
   return (
     <>
-      <h2 className="cursor-pointer bg-gradient-to-r from-blue-700 to-white flex justify-between px-10 py-2 text-white font-serif normalcase font-extralight rounded-xl w-full " onClick={() => setClicked(!clicked)} onMouseEnter={() => setOpen(true)} onMouseLeave={() => setOpen(null)}><span>CREATE TASK</span> <span className="text-blue-500 font-extrabold">{taskOpened ? '🔽' : '🔼'}</span></h2>
+      <h2 className="cursor-pointer bg-gradient-to-r from-blue-700 to-white flex justify-between px-10 py-2 text-white font-serif normalcase font-extralight rounded-xl w-full " onClick={() => setClicked(!clicked)} onMouseEnter={() => setOpen(true)} onMouseLeave={() => setOpen(null)}><span>{isCreated ? 'ADD TASK' : 'CREATE TASK'}</span> <span className="text-blue-500 font-extrabold">{taskOpened ? '🔽' : '🔼'}</span></h2>
       {taskOpened && <form className={taskOpened ? '': ''}>
         <label htmlFor="taskTitle">
           Task Name:{" "}
@@ -71,8 +72,8 @@ function CreateTask({ setTaskList, taskList, completed }) {
               duedate: new Date(Date.now()),
               deadline: deadline
             };
-            console.log("Adding new task to the task list", newTask);
             setTaskList([...taskList, newTask]);
+            setIsCreated(true);
           }}
         >
           CREATE
