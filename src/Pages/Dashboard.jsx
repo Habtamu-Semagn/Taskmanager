@@ -45,9 +45,13 @@ function Dashboard() {
           Quick Add Task
         </h1>
         <CreateTask />
-        <h1 className="font-bold text-end dark:text-white">Progress Metrics</h1>
+        <h1 className="font-bold text-end dark:text-white mt-10 mb-10">
+          Progress Metrics
+        </h1>
         <ProgressBar />
-        <h1 className="font-bold text-end dark:text-white">Recent Activity</h1>
+        <h1 className="font-bold text-end dark:text-white mt-20">
+          Recent Activity
+        </h1>
         <TasksByDate place="dashboard" />
       </div>
     );

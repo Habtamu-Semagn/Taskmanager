@@ -53,7 +53,7 @@ function CreateTask() {
               className="flex gap-5 font-bold tracking-wide text-md dark:text-slate-200"
             >
               Description:{" "}
-              <input
+              <textarea
                 type="text"
                 id="description"
                 className="bg-gray-100 h-7 px-3 focus:outline-blue-500"
@@ -113,6 +113,7 @@ function CreateTask() {
               onClick={(e) => {
                 e.preventDefault();
                 const newTask = {
+                  id: taskList.length,
                   taskTitle: state.taskTitle,
                   description: state.description,
                   priority: state.priority,

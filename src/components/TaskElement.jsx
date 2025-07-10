@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import _ from "lodash";
 import RemoveIcon from "@mui/icons-material/Remove";
 import DescriptionIcon from "@mui/icons-material/Description";
@@ -8,24 +8,24 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { useTaskContext } from "../contexts/TaskContext";
 import { AddCircle } from "@mui/icons-material";
 import { ThemeProvider } from "../contexts/ThemeContext";
-function handleComplete(e, el, taskList, setTaskList) {
+function handleComplete(e, el, taskList, setTaskList, handleEdit) {
   if (e.target.textContent === "Complete") {
     const updated = taskList.map((task) =>
       _.isEqual(task, el) ? { ...task, completed: true } : task
     );
     setTaskList(updated);
   } else if (e.target.closest(`svg`).id === "delete") {
-    console.log("delete");
     const updated = taskList.filter((task) => !_.isEqual(task, el));
     setTaskList(updated);
   } else if (e.target.closest(`svg`).id === "edit") {
-    console.log("edit");
+    handleEdit(el);
   }
 }
 function handleDetail(detail, setDetail) {
   setDetail(!detail);
 }
 function TaskElement({ el }) {
+  console.log(el);
   const weekDays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
   const monthsArr = [
     "Jan",
@@ -51,12 +51,58 @@ function TaskElement({ el }) {
   const sec = dueDate.getSeconds();
   const [detail, setDetail] = useState(false);
   const { taskList, setTaskList } = useTaskContext();
+  const [editingTask, setEditingTask] = useState(null);
+  const [editForm, setEditForm] = useState({ taskTitle: "", description: "" });
+  const [isLoading, setIsLoading] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  // Start editing a task
+  const handleEdit = (task) => {
+    setEditingTask(task.id);
+    setEditForm({
+      taskTitle: task.taskTitle,
+      description: task.description || "",
+    });
+    setIsModalOpen(true);
+  };
 
+  // Handle form input changes
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setEditForm((prev) => ({ ...prev, [name]: value }));
+  };
+
+  // Save edited task
+  const handleSave = useCallback(() => {
+    if (!editForm.taskTitle.trim()) return; // Basic validation
+    setIsLoading(true);
+    // Simulate async update (e.g., API call)
+    setTimeout(() => {
+      setTaskList((prev) =>
+        prev.map((task) =>
+          task.id === editingTask ? { ...task, ...editForm } : task
+        )
+      );
+      setEditingTask(null);
+      setEditForm({ taskTitle: "", description: "" });
+      setIsModalOpen(false);
+      setIsLoading(false);
+      // displayCompleted();
+    }, 500); // Simulate API delay
+  }, [editingTask, editForm, setTaskList]); //displayCompleted
+
+  // Cancel editing
+  const handleCancel = () => {
+    setEditingTask(null);
+    setEditForm({ taskTitle: "", description: "" });
+    setIsModalOpen(false);
+  };
   return (
     <ThemeProvider>
       <div
         className="bg-blue-400 py-3 rounded-lg m-2 w-100 dark:bg-neutral-500"
-        onClick={(e) => handleComplete(e, el, taskList, setTaskList)}
+        onClick={(e) =>
+          handleComplete(e, el, taskList, setTaskList, handleEdit)
+        }
       >
         <p
           className="flex justify-between mb-2 cursor-pointer"
@@ -89,6 +135,48 @@ function TaskElement({ el }) {
           </button>
         </p>
       </div>
+      /////////////////////////////////////////////////////////////////////////////////////////////////////////
+      {isModalOpen && (
+        <div className="fixed inset-0 flex items-center justify-center z-50">
+          <div className="bg-blue-500 p-6 rounded-lg shadow-lg w-full max-w-md">
+            <h2 className="text-xl font-bold mb-4">Edit Task</h2>
+            <div className="space-y-4">
+              <input
+                type="text"
+                name="taskTitle"
+                value={editForm.taskTitle}
+                onChange={handleInputChange}
+                className="w-full border p-2 rounded font-bold bg-slate-300 border-none"
+                placeholder="Task title"
+              />
+              <textarea
+                name="description"
+                value={editForm.description}
+                onChange={handleInputChange}
+                className="w-full border p-2 rounded font-bold bg-slate-300 border-none"
+                placeholder="Task description"
+                rows="4"
+              />
+              <div className="flex justify-end space-x-2">
+                <button
+                  onClick={handleSave}
+                  className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700"
+                  disabled={isLoading}
+                >
+                  Save
+                </button>
+                <button
+                  onClick={handleCancel}
+                  className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"
+                  disabled={isLoading}
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </ThemeProvider>
   );
 }

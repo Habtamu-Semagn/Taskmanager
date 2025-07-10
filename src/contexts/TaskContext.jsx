@@ -5,6 +5,7 @@ const TaskContext = createContext();
 export function TaskProvider({ children }) {
   const [taskList, setTaskList] = useState([
     {
+      id: 0,
       category: "personal",
       completed: false,
       deadline: new Date(Date.now()),
@@ -14,6 +15,7 @@ export function TaskProvider({ children }) {
       taskTitle: "selam",
     },
     {
+      id: 1,
       category: "work",
       completed: false,
       deadline: new Date(Date.now()),
@@ -23,6 +25,7 @@ export function TaskProvider({ children }) {
       taskTitle: "066-30-same-day",
     },
     {
+      id: 2,
       category: "other",
       completed: false,
       deadline: new Date(Date.now()),
@@ -32,6 +35,7 @@ export function TaskProvider({ children }) {
       taskTitle: "06-30-same-day",
     },
     {
+      id: 3,
       taskTitle: "selam-next",
       description: "selam",
       priority: "medium",
@@ -41,6 +45,7 @@ export function TaskProvider({ children }) {
       deadline: new Date("2025-07-06T07:00:00.000Z"),
     },
     {
+      id: 4,
       taskTitle: "task",
       description: "task description",
       priority: "low",
