@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
 .custom-cursor-delete {
   cursor: url("./assets/delete.svg"), grab;
 }

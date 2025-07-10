@@ -1,9 +1,9 @@
 import Chart from "react-google-charts";
 import CreateTask from "../components/CreateTask";
 import { useTaskContext } from "../contexts/TaskContext";
-import noTaskImg from "../assets/notask.png";
-import { Link } from "react-router-dom";
 import TasksByDate from "../components/TasksByDate";
+import ProgressBar from "../components/ProgressBar";
+import { NoTask } from "../components/NoTask";
 function Dashboard() {
   const { taskList } = useTaskContext();
   if (taskList.length) {
@@ -19,13 +19,12 @@ function Dashboard() {
       [`completed: ${completedTasks}`, completedTasks],
       [`Remain: ${remainTasks}`, remainTasks],
     ];
-
     const options = {
       title: `Total tasks: ${totalTasks}`,
     };
     return (
-      <div>
-        <h1 className="font-bold text-end">Task Summary</h1>
+      <div className="p-10">
+        <h1 className="font-bold text-end dark:text-white">Task Summary</h1>
         <Chart
           chartType="PieChart"
           data={data}
@@ -33,30 +32,27 @@ function Dashboard() {
           width={"500px"}
           height={"400px"}
         />
+
         {deadline && (
           <div>
-            <h1 className="font-bold text-end m-3">Upcoming Deadline</h1>
+            <h1 className="font-bold text-end m-3 dark:text-white">
+              Upcoming Deadline
+            </h1>
             <p className="text-red-600 font-extrabold bg-white rounded-xl p-3">{`${deadline.getDate()}/${deadline.getMonth() + 1}/${deadline.getFullYear()}`}</p>
           </div>
         )}
-        <h1 className="font-bold text-end m-3">Quick Add Task</h1>
+        <h1 className="font-bold text-end m-3 dark:text-white">
+          Quick Add Task
+        </h1>
         <CreateTask />
-        <h1 className="font-bold text-end">Progress Metrics</h1>
-        <h1 className="font-bold text-end">Recent Activity</h1>
+        <h1 className="font-bold text-end dark:text-white">Progress Metrics</h1>
+        <ProgressBar />
+        <h1 className="font-bold text-end dark:text-white">Recent Activity</h1>
         <TasksByDate place="dashboard" />
       </div>
     );
   } else {
-    return (
-      <div>
-        <img src={noTaskImg} alt="no image" />
-        <p className="text-center bg-white p-3">
-          <button className="bg-blue-500 font-bold text-white p-4 text-center text-xl hover:bg-blue-900 cursor-pointer">
-            <Link to="tasks">Create New Task</Link>
-          </button>
-        </p>
-      </div>
-    );
+    return <NoTask />;
   }
 }
 export default Dashboard;

@@ -6,7 +6,7 @@ function Categories() {
   return (
     <div className="categories cursor-pointer select-none ">
       <div>
-        <h2 className="bg-sky-400 px-5 border-2 border-sky-400 rounded-lg py-1 my-2 font-extrabold tracking-widest">
+        <h2 className="bg-sky-400 px-5 border-2 border-sky-400 rounded-lg py-1 my-2 font-extrabold tracking-widest dark:bg-slate-800 dark:text-white dark:border-none dark:py-3">
           Personal
         </h2>
         {taskList
@@ -18,7 +18,7 @@ function Categories() {
           ))}
       </div>
       <div>
-        <h2 className="bg-sky-400 px-5 border-2 border-sky-400 rounded-lg py-1 my-2 font-extrabold tracking-widest">
+        <h2 className="bg-sky-400 px-5 border-2 border-sky-400 rounded-lg py-1 my-2 font-extrabold tracking-widest dark:bg-slate-800 dark:text-white dark:border-none dark:py-3">
           Work
         </h2>
         {taskList
@@ -30,7 +30,7 @@ function Categories() {
           ))}
       </div>
       <div>
-        <h2 className="bg-sky-400 px-5 border-2 border-sky-400 rounded-lg py-1 my-2 font-extrabold tracking-widest">
+        <h2 className="bg-sky-400 px-5 border-2 border-sky-400 rounded-lg py-1 my-2 font-extrabold tracking-widest dark:bg-slate-800 dark:text-white dark:border-none dark:py-3">
           Other
         </h2>
         {taskList

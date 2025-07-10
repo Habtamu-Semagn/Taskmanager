@@ -1,19 +1,26 @@
 import TaskElement from "../components/TaskElement";
 import { useTaskContext } from "../contexts/TaskContext";
-
+import completedImg from "../assets/noneCompleted.png";
 function Completed() {
   const { taskList } = useTaskContext();
   const completed = taskList.filter((task) => task.completed === true);
   return (
     <div>
-      {completed ? (
+      {completed.length ? (
         <div>
           {completed.map((ele) => (
             <TaskElement el={ele} />
           ))}
         </div>
       ) : (
-        <img src={completedImg} alt="image not found" srcset="" />
+        <div className="flex justify-center items-center">
+          <div>
+            <img className="mt-10" src={completedImg} alt="image not found" />
+            <p className="font-bold tracking-wide text-xl text-center mt-3 dark:text-white">
+              No completed task
+            </p>
+          </div>
+        </div>
       )}
     </div>
   );

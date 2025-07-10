@@ -1,12 +1,13 @@
 import { useState } from "react";
 import _ from "lodash";
-import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
-import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
+import RemoveIcon from "@mui/icons-material/Remove";
 import DescriptionIcon from "@mui/icons-material/Description";
 import CheckIcon from "@mui/icons-material/Check";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useTaskContext } from "../contexts/TaskContext";
+import { AddCircle } from "@mui/icons-material";
+import { ThemeProvider } from "../contexts/ThemeContext";
 function handleComplete(e, el, taskList, setTaskList) {
   if (e.target.textContent === "Complete") {
     const updated = taskList.map((task) =>
@@ -52,39 +53,43 @@ function TaskElement({ el }) {
   const { taskList, setTaskList } = useTaskContext();
 
   return (
-    <div
-      className="bg-blue-400 py-3 rounded-lg m-2 w-100"
-      onClick={(e) => handleComplete(e, el, taskList, setTaskList)}
-    >
-      <p
-        className="flex justify-between mb-2 cursor-pointer"
-        onClick={() => handleDetail(detail, setDetail)}
+    <ThemeProvider>
+      <div
+        className="bg-blue-400 py-3 rounded-lg m-2 w-100 dark:bg-neutral-500"
+        onClick={(e) => handleComplete(e, el, taskList, setTaskList)}
       >
-        {" "}
-        <span className="font-bold flex gap-3">
-          {detail ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
-          {el.taskTitle}
-        </span>
-        <span>{`${day} ${date} ${month}, ${year}`}</span>
-        ////
-      </p>
-      {detail === true && (
-        <div className="bg-blue-200 leading-1.6">
-          <span className="flex flex-wrap gap-3">
-            <DescriptionIcon />
-            {el.description}
+        <p
+          className="flex justify-between mb-2 cursor-pointer"
+          onClick={() => handleDetail(detail, setDetail)}
+        >
+          {" "}
+          <span className="font-bold flex gap-3">
+            {detail ? <RemoveIcon /> : <AddCircle />}
           </span>
-          <span className="font-extralight self-end">{`${hour < 10 ? `0${hour}` : hour}:${min < 10 ? `0${min}` : min}:${sec < 10 ? `0${sec}` : sec}`}</span>
-        </div>
-      )}
-      <p className="flex justify-between items-center pt-3 ">
-        <EditIcon id="edit" className="custom-cursor-edit" />
-        <DeleteIcon id="delete" className="custom-cursor-delete" />
-        <button className="bg-blue-500 rounded-xl font-bold font-serif px-3 cursor-grab">
-          {el.completed ? <CheckIcon /> : "Complete"}
-        </button>
-      </p>
-    </div>
+          <span className="font-bold font-sans text-xl">{el.taskTitle}</span>
+          <span className="font-serif">{`${day} ${date} ${month}, ${year}`}</span>
+        </p>
+        {detail === true && (
+          <div className="bg-blue-200 leading-1.6">
+            <span className="flex flex-wrap gap-3">
+              <DescriptionIcon />
+              {el.description}
+            </span>
+            <span className="font-extralight self-end">{`${hour < 10 ? `0${hour}` : hour}:${min < 10 ? `0${min}` : min}:${sec < 10 ? `0${sec}` : sec}`}</span>
+          </div>
+        )}
+        <p className="flex justify-between items-center pt-3">
+          <EditIcon id="edit" className="custom-cursor-edit" />
+          <DeleteIcon id="delete" className="custom-cursor-delete" />
+          <button
+            title="✔"
+            className="bg-blue-500 rounded-xl font-bold font-serif px-3 cursor-grab dark:bg-gradient-to-r dark:from-black dark:to-neutral-500 dark:text-white"
+          >
+            {el.completed ? <CheckIcon /> : "Complete"}
+          </button>
+        </p>
+      </div>
+    </ThemeProvider>
   );
 }
 export default TaskElement;

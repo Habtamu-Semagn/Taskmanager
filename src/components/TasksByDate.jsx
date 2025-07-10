@@ -20,9 +20,7 @@ function TasksByDate({ place }) {
   const sorted = taskList.sort((a, b) => b.duedate - a.duedate);
   const tasksbydate = groupTasksByDate(sorted);
   const sortedDates = Object.keys(tasksbydate);
-  console.log("sortedDates", sortedDates);
   const recentDates = Object.keys(tasksbydate).slice(0, 3);
-  // const recentActivities = Object.entries(tasksbydate).slice(0, 3);
 
   return (
     <div>
@@ -39,7 +37,9 @@ function TasksByDate({ place }) {
             <div>
               <p className="text-end font-bold">{date}</p>
               {tasksbydate[date].map((task) => (
-                <TaskElement el={task} />
+                <div className="flex justify-end gap-10">
+                  <TaskElement el={task} />
+                </div>
               ))}
             </div>
           ))}
