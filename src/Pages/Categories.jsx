@@ -4,7 +4,7 @@ function Categories() {
   const { taskList } = useTaskContext();
   console.log(taskList);
   return (
-    <div className="categories cursor-pointer select-none ">
+    <div className="cursor-pointer select-none p-10">
       <div>
         <h2 className="bg-sky-400 px-5 border-2 border-sky-400 rounded-lg py-1 my-2 font-extrabold tracking-widest dark:bg-slate-800 dark:text-white dark:border-none dark:py-3">
           Personal

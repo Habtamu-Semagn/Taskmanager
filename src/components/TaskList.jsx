@@ -20,7 +20,6 @@ function TaskList() {
 
   displayCompleted(taskList, displayBtn, setDisplayBtn);
 
-  
   return (
     <>
       <div>
@@ -60,14 +59,13 @@ function TaskList() {
         {taskDependence === "date" && <TasksByDate taskList={taskList} />}
         {displayBtn === true && (
           <button
-            className="bg-blue-500 text-right font-bold text-white p-3 rounded-xl dark:bg-gradient-to-br dark:from-gray-600 dark:to-black"
+            className="bg-blue-500 text-right font-bold text-white p-3 rounded-xl cursor-pointer dark:bg-gradient-to-br dark:from-gray-600 dark:to-black"
             onClick={(e) => handleComplete(taskList, setTaskList, e)}
           >
             COMPLETE
           </button>
         )}
       </div>
-      
     </>
   );
 }

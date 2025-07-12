@@ -8,8 +8,9 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { useTaskContext } from "../contexts/TaskContext";
 import { AddCircle } from "@mui/icons-material";
 import { ThemeProvider } from "../contexts/ThemeContext";
+
 function handleComplete(e, el, taskList, setTaskList, handleEdit) {
-  if (e.target.textContent === "Complete") {
+  if (e.target.tagName === "BUTTON" && e.target.textContent === "Complete") {
     const updated = taskList.map((task) =>
       _.isEqual(task, el) ? { ...task, completed: true } : task
     );
@@ -21,11 +22,12 @@ function handleComplete(e, el, taskList, setTaskList, handleEdit) {
     handleEdit(el);
   }
 }
+
 function handleDetail(detail, setDetail) {
   setDetail(!detail);
 }
+
 function TaskElement({ el }) {
-  console.log(el);
   const weekDays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
   const monthsArr = [
     "Jan",
@@ -53,9 +55,8 @@ function TaskElement({ el }) {
   const { taskList, setTaskList } = useTaskContext();
   const [editingTask, setEditingTask] = useState(null);
   const [editForm, setEditForm] = useState({ taskTitle: "", description: "" });
-  const [isLoading, setIsLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  // Start editing a task
+
   const handleEdit = (task) => {
     setEditingTask(task.id);
     setEditForm({
@@ -65,37 +66,29 @@ function TaskElement({ el }) {
     setIsModalOpen(true);
   };
 
-  // Handle form input changes
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setEditForm((prev) => ({ ...prev, [name]: value }));
   };
 
-  // Save edited task
   const handleSave = useCallback(() => {
-    if (!editForm.taskTitle.trim()) return; // Basic validation
-    setIsLoading(true);
-    // Simulate async update (e.g., API call)
-    setTimeout(() => {
-      setTaskList((prev) =>
-        prev.map((task) =>
-          task.id === editingTask ? { ...task, ...editForm } : task
-        )
-      );
-      setEditingTask(null);
-      setEditForm({ taskTitle: "", description: "" });
-      setIsModalOpen(false);
-      setIsLoading(false);
-      // displayCompleted();
-    }, 500); // Simulate API delay
-  }, [editingTask, editForm, setTaskList]); //displayCompleted
+    if (!editForm.taskTitle.trim()) return;
+    setTaskList((prev) =>
+      prev.map((task) =>
+        task.id === editingTask ? { ...task, ...editForm } : task
+      )
+    );
+    setEditingTask(null);
+    setEditForm({ taskTitle: "", description: "" });
+    setIsModalOpen(false);
+  }, [editingTask, editForm, setTaskList]);
 
-  // Cancel editing
   const handleCancel = () => {
     setEditingTask(null);
     setEditForm({ taskTitle: "", description: "" });
     setIsModalOpen(false);
   };
+
   return (
     <ThemeProvider>
       <div
@@ -105,7 +98,7 @@ function TaskElement({ el }) {
         }
       >
         <p
-          className="flex justify-between mb-2 cursor-pointer"
+          className="flex justify-between mb-2 cursor-pointer px-3"
           onClick={() => handleDetail(detail, setDetail)}
         >
           {" "}
@@ -116,15 +109,18 @@ function TaskElement({ el }) {
           <span className="font-serif">{`${day} ${date} ${month}, ${year}`}</span>
         </p>
         {detail === true && (
-          <div className="bg-blue-200 leading-1.6">
-            <span className="flex flex-wrap gap-3">
+          <div className="bg-blue-200 leading-1.6 py-5 px-3">
+            <span className="flex flex-wrap gap-5">
               <DescriptionIcon />
               {el.description}
             </span>
-            <span className="font-extralight self-end">{`${hour < 10 ? `0${hour}` : hour}:${min < 10 ? `0${min}` : min}:${sec < 10 ? `0${sec}` : sec}`}</span>
+            <p className="self-end font-bold text-end">
+              created At:{" "}
+              {`${hour < 10 ? `0${hour}` : hour}:${min < 10 ? `0${min}` : min}:${sec < 10 ? `0${sec}` : sec}`}
+            </p>
           </div>
         )}
-        <p className="flex justify-between items-center pt-3">
+        <p className="flex justify-center gap-4 items-center pt-3">
           <EditIcon id="edit" className="custom-cursor-edit" />
           <DeleteIcon id="delete" className="custom-cursor-delete" />
           <button
@@ -135,9 +131,9 @@ function TaskElement({ el }) {
           </button>
         </p>
       </div>
-      /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
       {isModalOpen && (
-        <div className="fixed inset-0 flex items-center justify-center z-50">
+        <div className="fixed inset-0 flex items-center justify-center z-50 backdrop-brightness-20">
           <div className="bg-blue-500 p-6 rounded-lg shadow-lg w-full max-w-md">
             <h2 className="text-xl font-bold mb-4">Edit Task</h2>
             <div className="space-y-4">
@@ -161,14 +157,12 @@ function TaskElement({ el }) {
                 <button
                   onClick={handleSave}
                   className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700"
-                  disabled={isLoading}
                 >
                   Save
                 </button>
                 <button
                   onClick={handleCancel}
-                  className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"
-                  disabled={isLoading}
+                  className="bg-gray-500 text-white px-4 py-2 rounded cursor-pointer hover:bg-gray-600"
                 >
                   Cancel
                 </button>

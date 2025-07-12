@@ -9,7 +9,7 @@ function ModeBtn({ position }) {
   const { theme, setTheme } = useContext(ThemeContext);
   handleDarkMode(theme);
   return (
-    <div className={position ? "fixed top-10 right-10" : "flex"}>
+    <div className={position ? "fixed top-10 right-10 z-50" : "flex z-50"}>
       <span
         className="bg-neutral-400 hover:bg-slate-950 hover:text-white p-3 dark:text-white dark:bg-slate-950"
         onClick={() => theme === "dark" || setTheme("dark")}

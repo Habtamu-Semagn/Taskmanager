@@ -1,5 +1,5 @@
 import DatePicker from "react-datepicker";
-import { useReducer } from "react";
+import { useReducer, useState } from "react";
 import "react-datepicker/dist/react-datepicker.css";
 import { useTaskContext } from "../contexts/TaskContext";
 import { ThemeProvider } from "../contexts/ThemeContext";
@@ -19,6 +19,29 @@ function CreateTask() {
   const [state, dispatch] = useReducer(reducer, initialState);
   const { taskList, setTaskList } = useTaskContext();
   const taskOpened = state.open ?? state.clicked;
+  const [isTitleSet, setIsTitleSet] = useState("");
+  const largeId = taskList.length
+    ? Math.max(...taskList.map((task) => task.id))
+    : 0;
+
+  const handleCreate = (e) => {
+    e.preventDefault();
+    const newTask = {
+      id: largeId + 1,
+      taskTitle: state.taskTitle,
+      description: state.description,
+      priority: state.priority,
+      category: state.category,
+      completed: false,
+      duedate: new Date(Date.now()),
+      deadline: state.deadline,
+    };
+    state.taskTitle && setTaskList([...taskList, newTask]);
+    state.taskTitle ? setIsTitleSet("") : setIsTitleSet("Enter Task Name...");
+
+    dispatch(setIsCreated(true));
+  };
+
   return (
     <ThemeProvider>
       <div>
@@ -28,7 +51,7 @@ function CreateTask() {
           onMouseEnter={() => dispatch(setOpen(true))}
           onMouseLeave={() => dispatch(setOpen(null))}
         >
-          <span>{state.isCreated ? "ADD TASK" : "CREATE TASK"}</span>{" "}
+          <span>{taskList.length ? "ADD TASK" : "CREATE TASK"}</span>{" "}
           <span className="text-blue-500 font-extrabold">
             {taskOpened ? "🔽" : "🔼"}
           </span>
@@ -48,6 +71,9 @@ function CreateTask() {
               />
             </label>
             <br />
+            {isTitleSet && (
+              <p className="text-red-600 font-bold">{isTitleSet}</p>
+            )}
             <label
               htmlFor="description"
               className="flex gap-5 font-bold tracking-wide text-md dark:text-slate-200"
@@ -110,22 +136,8 @@ function CreateTask() {
             </label>
             <br />
             <p
-              onClick={(e) => {
-                e.preventDefault();
-                const newTask = {
-                  id: taskList.length,
-                  taskTitle: state.taskTitle,
-                  description: state.description,
-                  priority: state.priority,
-                  category: state.category,
-                  completed: false,
-                  duedate: new Date(Date.now()),
-                  deadline: state.deadline,
-                };
-                setTaskList([...taskList, newTask]);
-                dispatch(setIsCreated(true));
-              }}
-              className="bg-blue-500 rounded-xl text-center p-3 text-xl tracking-widest hover:bg-blue-950 hover:text-white  dark:bg-black dark:text-white dark:hover:bg-neutral-800"
+              onClick={(e) => handleCreate(e)}
+              className="bg-blue-500 rounded-xl text-center p-3 text-xl tracking-widest cursor-pointer hover:bg-blue-950 hover:text-white  dark:bg-black dark:text-white dark:hover:bg-neutral-800"
             >
               <button className="font-sans font-bold">CREATE</button>
             </p>
@@ -135,4 +147,5 @@ function CreateTask() {
     </ThemeProvider>
   );
 }
+
 export default CreateTask;
