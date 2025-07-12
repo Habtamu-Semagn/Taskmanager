@@ -1,6 +1,6 @@
 import TaskElement from "../components/TaskElement";
 import { useTaskContext } from "../contexts/TaskContext";
-import completedImg from "../assets/noneCompleted.png";
+import completedImg from "../assets/noneCompleted.PNG";
 function Completed() {
   const { taskList } = useTaskContext();
   const completed = taskList.filter((task) => task.completed === true);
