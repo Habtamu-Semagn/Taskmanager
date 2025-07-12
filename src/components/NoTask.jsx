@@ -1,9 +1,9 @@
 import { Link } from "react-router-dom";
-import noTaskImg from "../assets/notask.png";
+import noTaskImg from "../assets/notask.PNG";
 export function NoTask() {
   return (
     <div className="flex justify-center items-center">
-      <div>
+      <div className="dark:brightness-50">
         <img src={noTaskImg} alt="no image" />
         <p className="text-center bg-white p-3">
           <button className="bg-blue-500 font-bold text-white p-4 text-center text-xl hover:bg-blue-900 cursor-pointer">

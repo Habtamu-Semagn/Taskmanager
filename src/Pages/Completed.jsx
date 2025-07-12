@@ -15,7 +15,11 @@ function Completed() {
       ) : (
         <div className="flex justify-center items-center">
           <div>
-            <img className="mt-10" src={completedImg} alt="image not found" />
+            <img
+              className="mt-10 dark:brightness-50"
+              src={completedImg}
+              alt="image not found"
+            />
             <p className="font-bold tracking-wide text-xl text-center mt-3 dark:text-white">
               No completed task
             </p>
